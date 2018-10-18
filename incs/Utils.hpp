@@ -13,6 +13,7 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include <IOperand.hpp>
 #include <iostream>
 
 class Utils
@@ -20,11 +21,19 @@ class Utils
   public:
     virtual ~Utils(){}
 
-    static std::string& ltrim(std::string& str, const std::string& chars = "\t\n\v\f\r ");
-    static std::string& rtrim(std::string& str, const std::string& chars = "\t\n\v\f\r ");
-    static std::string& trim(std::string& str, const std::string& chars = "\t\n\v\f\r ");
+    static std::string& ltrim(std::string& str, const std::string& chars = "\n");
+    static std::string& rtrim(std::string& str, const std::string& chars = "\n");
+    static std::string& trim(std::string& str, const std::string& chars = "\n");
     static std::string& rmComment(std::string& str, const std::string& chars = ";");
+    static bool is_number( const std::string &, double *);
    
+    IOperand const * createOperand( eOperandType type, std::string const & value ) const;
+   private:
+    IOperand const * createInt8( std::string const & value ) const;
+    IOperand const * createInt16( std::string const & value ) const;
+    IOperand const * createInt32( std::string const & value ) const;
+    IOperand const * createFloat( std::string const & value ) const;
+    IOperand const * createDouble( std::string const & value ) const;
 };
 
 #endif

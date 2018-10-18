@@ -34,3 +34,60 @@ std::string& Utils::rmComment(std::string& str, const std::string& chars)
     str = str.substr(0, str.find_first_of(chars));
     return ltrim(rtrim(str, chars), chars);
 }
+
+bool Utils::is_number(const std::string& s, double *ptr_d)
+{
+    try
+    {
+        *ptr_d = std::stod(s);
+    }
+    catch(...)
+    {
+        std::cerr << "Error: can't convert to double" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+IOperand const * Utils::createInt8( std::string const & value ) const
+{
+    (void)value;
+    return 0;
+}
+
+IOperand const * Utils::createInt16( std::string const & value ) const
+{
+    (void)value;
+    return 0;
+}
+
+IOperand const * Utils::createInt32( std::string const & value ) const
+{
+    (void)value;
+    return 0;
+}
+
+IOperand const * Utils::createFloat( std::string const & value ) const
+{
+    (void)value;
+    return 0;
+}
+
+IOperand const * Utils::createDouble( std::string const & value ) const
+{
+    (void)value;
+    return 0;
+}
+
+IOperand const * Utils::createOperand( eOperandType type, std::string const & value ) const
+{
+    (void)type;
+    (void)value;
+    static IOperand const *(Utils::*arr_f[5])( std::string const &) const = 
+                {&Utils::createInt8,
+                 &Utils::createInt16,
+                 &Utils::createInt32,
+                 &Utils::createFloat,
+                 &Utils::createDouble};
+    return (this->*arr_f[type])(value);
+}

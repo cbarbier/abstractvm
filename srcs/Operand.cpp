@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lexer.cpp                                          :+:      :+:    :+:   */
+/*   Operand.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,19 +10,45 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Lexer.hpp>
-#include <AbstractVM.hpp>
+#include <Operand.hpp>
 #include <iostream>
 
-Lexer::Lexer( std::vector<std::string> & lines )
+template <class T>
+Operand::Operand( void )
 {
-    std::vector<std::string>::iterator it=lines.begin(), ite = lines.end();
-    for(;it!=ite;++it)
-        std::cout << *it << std::endl;    
+    this->_value = std::to_string(static_cast<T>(0));
 }
 
-Lexer::~Lexer( void )
+template <class T>
+Operand::~Operand( void )
 {
 }
 
+template<class T>
+Operand<T>::Operand( Operand<T> const & obj )
+{
+    *this = obj;
+}
 
+template<class T> Operand<T> & Operand<T>::operator=( Operand<T> const & rhs )
+{
+    this->_value = rhs._value;
+    return *this;
+}
+
+template<class T> Operand<T>::Operand( T value )
+{
+    this->_value = std::to_string(value);
+}
+
+template<class T> Operand<T>::Operand( std::string str )
+{
+    double d;
+    if (Utils::is_number(str, &d))
+        this->_value = std::to_string(static_cast<T>(d));
+}
+
+template<class T>
+std::string const & Operand<T>::toString( void ) const {
+	return this->_value;
+}
