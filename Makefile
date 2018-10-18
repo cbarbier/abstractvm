@@ -6,7 +6,7 @@
 #    By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/17 14:10:08 by cbarbier          #+#    #+#              #
-#    Updated: 2018/10/17 14:20:03 by cbarbier         ###   ########.fr        #
+#    Updated: 2018/10/18 15:21:14 by cbarbier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,9 @@ NAME		= abstractvm
 
 SRCS = \
 		main.cpp						\
+		AbstractVM.cpp					\
+		Utils.cpp						\
+		Lexer.cpp						\
 
 # ---------------------------------------------------------------------------- #
 # /!\ COLOR FOR PRINTF /!\                                                     #
@@ -77,7 +80,7 @@ LDFLAGS		= \
 LDLIBS		= \
 
 CPPFLAGS	= \
-					-I$(DIR_INCS)							\
+			-I$(DIR_INCS)							\
 
 FRAMEWORKS =  \
 
@@ -123,10 +126,10 @@ $(DIR_OBJS)	:
 all : $(NAME)
 
 $(DIR_OBJS)/%.o	:	$(DIR_SRCS)/%.cpp
-	$(CC) $(CFLAGS) -c $< $(LDFLAGS) $(LDLIBS)  $(FRAMEWORKS) -o $@
+	$(CC) $(CFLAGS) -c $< $(CPPFLAGS) $(LDFLAGS) $(LDLIBS)  $(FRAMEWORKS) -o $@
 			
 $(NAME)		: $(DIR_OBJS) $(O_SRCS) $(LIBS)
-	$(CC) $(O_SRCS) -o  $(NAME) $(LDFLAGS) $(LDLIBS) $(CFLAGS) $(FRAMEWORKS)
+	$(CC) $(O_SRCS) -o $(NAME) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $(FRAMEWORKS)
 
 clean		:
 	$(RM) $(DIR_OBJS)

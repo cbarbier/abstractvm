@@ -1,32 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Lexer.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 14:14:05 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/18 15:05:35 by cbarbier         ###   ########.fr       */
+/*   Created: 2018/10/18 12:04:26 by cbarbier          #+#    #+#             */
+/*   Updated: 2018/10/18 17:06:37 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <AbstractVM.hpp>
 #include <Lexer.hpp>
+#include <AbstractVM.hpp>
 #include <iostream>
 
-int         main( int argc, char **argv)
+const char      *Lexer::_instructions[] = {"push", "pop", "dump", "assert", "add", "sub", "mul", "div", "mod", "print", "exit"};
+
+Lexer::Lexer( std::vector<std::string> & lines )
 {
-    // std::cout << "abstract vm in progress" << std::endl;
-
-    if (argc > 2)
-    {
-        std::cerr << "Usage: ./abstractVM [filename]" << std::endl;
-    }
-    AbstractVM vm( argc == 2 ? argv[1] : 0);
-    Lexer      lexer(vm.getLines());
-
-
-
-
-    return (0);
+    std::vector<std::string>::iterator it=lines.begin(), ite = lines.end();
+    for(;it!=ite;++it)
+        std::cout << *it << std::endl;    
 }
+
+Lexer::~Lexer( void )
+{
+
+}
+

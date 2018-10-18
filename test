@@ -1,0 +1,19 @@
+;---------------
+;  test file   |
+;---------------
+
+push int8(42)
+push in16(32000);comment0
+;comment1
+
+
+pop
+dump
+exit
+;
+;
+;
+;
+;
+;
+;
