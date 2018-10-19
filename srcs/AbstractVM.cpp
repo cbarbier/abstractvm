@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:51:53 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/18 16:49:40 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/19 15:43:15 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ void AbstractVM::getInput(std::istream &is)
     while (!is.fail() && !is.eof())
     {
         std::getline(is, line, '\n');
-        std::cout << "line: " << line << std::endl;
-        line = Utils::trim(line);
+        // std::cout << "line: " << line << std::endl;
+        // line = Utils::trim(line);
         if (line == ";;" && !this->_pfile)
             break;
         line = Utils::rmComment(line);
-        if (line.length())
-            this->_lines.push_back(line);
+        // if (line.length())
+        this->_lines.push_back(line);
     }
 }
 
@@ -61,4 +61,21 @@ std::vector<std::string> &AbstractVM::getLines(void)
 
 AbstractVM::~AbstractVM()
 {
+}
+
+const char* AbstractVM::MyException::what() const throw()
+{
+    return "myException test";
+}
+const char* AbstractVM::Underflow::what() const throw()
+{
+    return "Underflow";
+}
+const char* AbstractVM::Overflow::what() const throw()
+{
+    return "Overflow";
+}
+const char* AbstractVM::DivByZero::what() const throw()
+{
+    return "Division by zero";
 }

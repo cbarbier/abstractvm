@@ -6,12 +6,24 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:41:02 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/17 16:12:20 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/19 11:38:22 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <AbstractVM.hpp>
+
+#ifndef IOPERAND_HPP
+#define IOPERAND_HPP
+
 #include <string>
+
+enum eOperandType {
+    Int8,
+    Int16,
+    Int32,
+    Float,
+    Double
+};
+
 
 class IOperand
 {
@@ -26,3 +38,4 @@ class IOperand
     virtual std::string const &toString(void) const = 0;              // String representation of the instance
     virtual ~IOperand(void) {}
 };
+#endif

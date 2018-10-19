@@ -25,7 +25,7 @@ class Utils
     static std::string& rtrim(std::string& str, const std::string& chars = "\n");
     static std::string& trim(std::string& str, const std::string& chars = "\n");
     static std::string& rmComment(std::string& str, const std::string& chars = ";");
-    static bool is_number( const std::string &, double *);
+    static bool is_number( const std::string &, long double *);
    
     IOperand const * createOperand( eOperandType type, std::string const & value ) const;
    private:

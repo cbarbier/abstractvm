@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/18 13:41:26 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/18 16:50:28 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/19 13:48:12 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ std::string& Utils::rmComment(std::string& str, const std::string& chars)
     return ltrim(rtrim(str, chars), chars);
 }
 
-bool Utils::is_number(const std::string& s, double *ptr_d)
+bool Utils::is_number(const std::string& s, long double *ptr_d)
 {
     try
     {
@@ -43,7 +43,8 @@ bool Utils::is_number(const std::string& s, double *ptr_d)
     }
     catch(...)
     {
-        std::cerr << "Error: can't convert to double" << std::endl;
+        std::cerr << "Error: can't convert to long double" << std::endl;
+        std::exit(1);
         return false;
     }
     return true;

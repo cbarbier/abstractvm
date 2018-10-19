@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:48:58 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/18 17:00:08 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/19 13:01:19 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,23 @@
 #include <vector>
 #include <string>
 
-enum eOperandType {
-    Int8,
-    Int16,
-    Int32,
-    Float,
-    Double
-};
-
 class AbstractVM
 {
 public:
+
+    struct MyException: public std::exception{
+         virtual const char* what() const throw ();
+    };
+    struct Underflow: public std::exception{
+         virtual const char* what() const throw ();
+    };
+    struct Overflow: public std::exception{
+         virtual const char* what() const throw ();
+    };
+    struct DivByZero: public std::exception{
+         virtual const char* what() const throw ();
+    };
+
     AbstractVM( char * );
     AbstractVM(const AbstractVM &);
     AbstractVM &operator=(const AbstractVM &);
