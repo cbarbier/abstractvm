@@ -48,7 +48,7 @@ SRCS = \
 		main.cpp						\
 		AbstractVM.cpp					\
 		Utils.cpp						\
-		Lexer.cpp						\
+		Analyzer.cpp					\
 		Operand.cpp						\
 
 # ---------------------------------------------------------------------------- #

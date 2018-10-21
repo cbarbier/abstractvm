@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lexer.hpp                                          :+:      :+:    :+:   */
+/*   Analyzer.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_HPP
-#define LEXER_HPP
+#ifndef ANALYZER_HPP
+#define ANALYZER_HPP
 #include <vector>
 #include <string>
 
@@ -28,7 +28,7 @@
 //
 //
 
-class Lexer
+class Analyzer
 {
   public:
     typedef struct s_token
@@ -51,16 +51,17 @@ class Lexer
     } t_error;
 
 
-    Lexer(void);
-    ~Lexer();
+    Analyzer(void);
+    ~Analyzer();
 
     bool tokenize(std::vector<std::string> &lines);
-    bool run(std::vector<std::string> &lines);
+    bool lex( std::vector<std::string> &lines );
+    bool parse( std::vector<std::string> &lines );
 
   private:
     void chopLine(std::string &line, size_t h);
-    Lexer(const Lexer &);
-    Lexer &operator=(const Lexer &);
+    Analyzer(const Analyzer& );
+    Analyzer &operator=(const Analyzer& );
 
     size_t _h;
     size_t _col;
@@ -68,4 +69,4 @@ class Lexer
     std::vector<std::vector<t_token> > _ltokens;
 };
 
-#endif // !LEXER_HPP
+#endif // !Analyzer_HPP

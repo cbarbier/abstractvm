@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <AbstractVM.hpp>
-#include <Lexer.hpp>
+#include <Analyzer.hpp>
 #include <iostream>
 
 int         main( int argc, char **argv)
@@ -27,9 +27,9 @@ int         main( int argc, char **argv)
         std::cerr << "Usage: ./abstractVM [filename]" << std::endl;
     }
     AbstractVM vm( argc == 2 ? argv[1] : 0);
-    Lexer      lexer;
+    Analyzer      analyzer;
 
-    if (!lexer.run( vm.getLines() )) // LEXER TOKENIZING THE ENTIRE PROGRAM 
+    if (!analyzer.lex( vm.getLines() )) // LEXER TOKENIZING THE ENTIRE PROGRAM 
         return (1);
     // PARSER CHECKING THE SYNTAX OF THE ENTIRE PROGRAM
 

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lexer.cpp                                          :+:      :+:    :+:   */
+/*   Analyzer.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,17 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Lexer.hpp>
+#include <Analyzer.hpp>
 #include <AbstractVM.hpp>
 #include <iostream>
 #include <sstream>
 #include <algorithm>
 #include <regex>
 
-Lexer::Lexer(void) {}
-Lexer::~Lexer(void) {}
+Analyzer::Analyzer(void) {}
+Analyzer::~Analyzer(void) {}
 
-void Lexer::chopLine(std::string &line, size_t h)
+void Analyzer::chopLine(std::string &line, size_t h)
 {
     size_t pos = line.find_first_not_of(" \t");
     size_t end;
@@ -90,7 +90,7 @@ void Lexer::chopLine(std::string &line, size_t h)
     this->_ltokens.push_back(vtoken);
 }
 
-bool Lexer::tokenize(std::vector<std::string> &lines)
+bool Analyzer::tokenize(std::vector<std::string> &lines)
 {
     size_t h = 0;
     std::vector<std::string>::iterator it = lines.begin(), ite = lines.end();
@@ -107,7 +107,7 @@ bool Lexer::tokenize(std::vector<std::string> &lines)
     return true;
 }
 
-bool Lexer::run(std::vector<std::string> &lines)
+bool Analyzer::lex(std::vector<std::string> &lines)
 {
     this->_h = lines.size();
 
@@ -136,14 +136,20 @@ bool Lexer::run(std::vector<std::string> &lines)
     return false;
 }
 
-void Lexer::t_error::put(void)
+bool Analyzer::parse(std::vector<std::string> &lines)
+{
+    (void)lines;
+    return true;
+}
+
+void Analyzer::t_error::put(void)
 {
     std::cerr << std::endl
               << "> " << this->line.substr(0, this->col) << "\x1b[35m" << this->line.substr(this->col, this->eow - this->col) << "\x1b[0m" << this->line.substr(this->eow) << std::endl;
-    std::cerr << "Error: Lexer: [" << this->row << ":" << this->col << "] " << this->mess << std::endl;
+    std::cerr << "Error: Analyzer: [" << this->row << ":" << this->col << "] " << this->mess << std::endl;
 }
 
-void Lexer::t_token::put(void)
+void Analyzer::t_token::put(void)
 {
     std::cout << "{ \n\
     type: " << this->type << std::endl << "\
