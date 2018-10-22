@@ -46,6 +46,7 @@ void Analyzer::chopLine(std::string &line, size_t h)
             end = line.length();
         word = line.substr(pos, end - pos);
         error.row = h;
+        token.row = h;
         error.col = pos;
         error.eow = end;
         std::cout << "[" << word << "]" << std::endl;
@@ -115,45 +116,51 @@ bool Analyzer::lex(std::vector<std::string> &lines)
 
     if (!this->_errors.size())
     {
-        //DEBUG for TOKENS vector;
-        // std::vector<std::vector<t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
-        // for (; it != ite; ++it)
-        // {
-        //     std::cout << "NEW LINE" << std::endl;
-        //     std::vector<t_token>::iterator itt = it->begin(), itet = it->end();
-        //     for (; itt != itet; ++itt)
-        //     {
-        //         itt->put();
-        //     }
-        //     std::cout << "END OF LINE" << std::endl;
-        // }
         return true;
     }
     //print the errors;
     std::vector<t_error>::iterator it = this->_errors.begin(), ite = this->_errors.end();
     for (; it != ite; ++it)
-        it->put();
+        it->put("Lexer");
     return false;
 }
 
 bool Analyzer::parse(std::vector<std::string> &lines)
 {
     (void)lines;
+        std::vector<std::vector<t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
+        for (; it != ite; ++it)
+        {
+            std::vector<t_token>::iterator itt = it->begin(), itet = it->end();
+            for (; itt != itet; ++itt)
+            {
+                itt->put();
+            }
+        }
     return true;
 }
 
-void Analyzer::t_error::put(void)
+void Analyzer::parseLine(std::vector<t_token> & line)
+{
+    if (line.size() > 2)
+    {
+
+    }
+}
+
+void Analyzer::t_error::put( const char * name )
 {
     std::cerr << std::endl
               << "> " << this->line.substr(0, this->col) << "\x1b[35m" << this->line.substr(this->col, this->eow - this->col) << "\x1b[0m" << this->line.substr(this->eow) << std::endl;
-    std::cerr << "Error: Analyzer: [" << this->row << ":" << this->col << "] " << this->mess << std::endl;
+    std::cerr << "Error: " << name << ": [" << this->row << ":" << this->col << "] " << this->mess << std::endl;
 }
 
 void Analyzer::t_token::put(void)
 {
-    std::cout << "{ \n\
+    std::cout << "{" << std::endl; << "\
     type: " << this->type << std::endl << "\
     value: " << this->value << std::endl << "\
     arg: " << this->arg << std::endl << "\
+    row: " << this->row << std::endl << "\
     }" << std::endl; 
 }

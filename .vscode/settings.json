@@ -9,6 +9,10 @@
         "stdexcept": "cpp",
         "typeinfo": "cpp",
         "algorithm": "cpp",
-        "iterator": "cpp"
+        "iterator": "cpp",
+        "limits": "cpp",
+        "string": "cpp",
+        "locale": "cpp",
+        "ostream": "cpp"
     }
 }

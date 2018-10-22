@@ -36,6 +36,7 @@ class Analyzer
         char        type;
         std::string value;
         std::string arg;
+        size_t      row;
 
         void put(void);
     } t_token;
@@ -47,7 +48,7 @@ class Analyzer
         std::string mess;
         std::string line;
 
-        void put(void);
+        void put(const char * name);
     } t_error;
 
 
@@ -59,6 +60,7 @@ class Analyzer
     bool parse( std::vector<std::string> &lines );
 
   private:
+    void parseLine(std::vector<t_token> & line);
     void chopLine(std::string &line, size_t h);
     Analyzer(const Analyzer& );
     Analyzer &operator=(const Analyzer& );
