@@ -55,12 +55,12 @@ class Analyzer
     Analyzer(void);
     ~Analyzer();
 
-    bool tokenize(std::vector<std::string> &lines);
     bool lex( std::vector<std::string> &lines );
-    bool parse( std::vector<std::string> &lines );
+    bool parse( void );
 
   private:
-    void parseLine(std::vector<t_token> & line);
+    bool tokenize(std::vector<std::string> &lines);
+    bool parseLine(std::vector<t_token> & line);
     void chopLine(std::string &line, size_t h);
     Analyzer(const Analyzer& );
     Analyzer &operator=(const Analyzer& );

@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 14:14:05 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/19 19:24:55 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/23 09:55:59 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int         main( int argc, char **argv)
     Analyzer      analyzer;
 
     if (!analyzer.lex( vm.getLines() )) // LEXER TOKENIZING THE ENTIRE PROGRAM 
+        return (1);
+    if (!analyzer.parse())
         return (1);
     // PARSER CHECKING THE SYNTAX OF THE ENTIRE PROGRAM
 

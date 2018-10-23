@@ -29,8 +29,6 @@ void Analyzer::chopLine(std::string &line, size_t h)
     std::smatch sm;
     std::regex re_instr("(push|pop|dump|assert|add|sub|mul|div|mod|print|exit)");
     std::regex re_value("(?:(int(?:8|16|32))\\((.*)\\)|(double|float)\\((.*)\\))");
-    // std::regex re_N("(-?\d*)");
-    // std::regex re_Z("(-?\d*\.\d*)");
 
     // std::replace(line.begin(), line.end(), '\t', ' ');
     // ss << line;
@@ -118,34 +116,85 @@ bool Analyzer::lex(std::vector<std::string> &lines)
     {
         return true;
     }
-    //print the errors;
+    //print the lexer errors;
     std::vector<t_error>::iterator it = this->_errors.begin(), ite = this->_errors.end();
     for (; it != ite; ++it)
         it->put("Lexer");
     return false;
 }
 
-bool Analyzer::parse(std::vector<std::string> &lines)
+bool Analyzer::parse( void )
 {
-    (void)lines;
-        std::vector<std::vector<t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
-        for (; it != ite; ++it)
-        {
-            std::vector<t_token>::iterator itt = it->begin(), itet = it->end();
-            for (; itt != itet; ++itt)
-            {
-                itt->put();
-            }
-        }
-    return true;
+    std::vector<std::vector<t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
+    for (; it != ite; ++it)
+    {
+      this->parseLine(*it);
+    }
+    // print parse errors
+    if (!this->_errors.size())
+        return true;
+    std::vector<t_error>::iterator iterr = this->_errors.begin(), iterre = this->_errors.end();
+    for (; iterr != iterre; ++iterr)
+        iterr->put("Parser");
+    return false;
 }
 
-void Analyzer::parseLine(std::vector<t_token> & line)
+bool Analyzer::parseLine(std::vector<t_token> & line)
 {
+    t_error     err;
+
+    if (!line.size())
+        return true;
+    err.row = line.at(0).row;
+    err.col = 0;
     if (line.size() > 2)
     {
-
+        err.mess = std::string("too many tokens on the same line");
+        this->_errors.push_back(err);
+        return false;
     }
+    if (line.at(0).type != 'I')
+    {
+        err.mess = std::string("expecting an instruction like [pop push assert add sub ...]");
+        this->_errors.push_back(err);
+        return false;
+    }
+    if (line.size() == 2 && line.at(0).value != "push" && line.at(0).value != "assert")
+    {
+        err.mess = std::string("execting an ENDL after this instruction \x1b[32m") + line.at(0).value + std::string("\x1b[0m"); 
+        this->_errors.push_back(err);
+        return false;
+    }
+    if (line.size() == 2 && ( line.at(0).value == "push" || line.at(0).value == "assert" ) )
+    {
+        if (line.at(1).type != 'V')
+        {
+            err.mess = std::string("execting a VALUE [int32() double()] after this instruction \x1b[32m") + line.at(0).value + std::string("\x1b[0m"); 
+            this->_errors.push_back(err);
+            return false;
+        }
+        std::string val;
+        std::smatch sm;
+        std::regex re_N("(-?\\d*)");
+        std::regex re_Z("(-?\\d*\\.\\d*)");
+
+        if (line.at(0).value == "double" || line.at(0).value == "float")
+        {
+            if (std::regex_match(val, sm, re_Z))
+                return true;
+            err.mess = std::string("expecting a value matching /-?[0-9]+.[0-9]+/");
+            this->_errors.push_back(err);
+            return false;
+        } else {
+             if (std::regex_match(val, sm, re_Z))
+                return true;
+            err.mess = std::string("expecting a value matching /-?[0-9]+/");
+            this->_errors.push_back(err);
+            return false;
+        }
+        return true;
+    }
+    return true;
 }
 
 void Analyzer::t_error::put( const char * name )
@@ -157,7 +206,7 @@ void Analyzer::t_error::put( const char * name )
 
 void Analyzer::t_token::put(void)
 {
-    std::cout << "{" << std::endl; << "\
+    std::cout << "{" << std::endl << "\
     type: " << this->type << std::endl << "\
     value: " << this->value << std::endl << "\
     arg: " << this->arg << std::endl << "\
