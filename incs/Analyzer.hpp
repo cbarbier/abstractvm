@@ -57,6 +57,7 @@ class Analyzer
 
     bool lex( std::vector<std::string> &lines );
     bool parse( void );
+    void put_tokens( void );
 
   private:
     bool tokenize(std::vector<std::string> &lines);
@@ -69,6 +70,7 @@ class Analyzer
     size_t _col;
     std::vector<t_error> _errors;
     std::vector<std::vector<t_token> > _ltokens;
+    std::vector<int> _vexit;
 };
 
 #endif // !Analyzer_HPP

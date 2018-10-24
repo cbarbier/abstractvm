@@ -131,12 +131,28 @@ bool Analyzer::parse( void )
       this->parseLine(*it);
     }
     // print parse errors
-    if (!this->_errors.size())
-        return true;
-    std::vector<t_error>::iterator iterr = this->_errors.begin(), iterre = this->_errors.end();
-    for (; iterr != iterre; ++iterr)
-        iterr->put("Parser");
-    return false;
+    bool ret = true;
+    if (this->_errors.size())
+    {
+        std::vector<t_error>::iterator iterr = this->_errors.begin(), iterre = this->_errors.end();
+        for (; iterr != iterre; ++iterr)
+            iterr->put("Parser");
+        ret = false;
+    }
+    if (!this->_vexit.size())
+    {
+        std::cerr << "Error: Parser: there must be an EXIT instruction in the program" << std::endl;
+        return false;
+    }
+    if (this->_vexit.size() > 1)
+    {
+        std::vector<int>::iterator it_vexit = this->_vexit.begin(), ite_vexit = this->_vexit.end();
+        std::cerr << "Error: Parser: there is more than one  EXIT instruction in the program :" << std::endl;
+        for (; it_vexit != ite_vexit; ++it_vexit)
+            std::cerr << "line " << *it_vexit  << std::endl;
+        return false;
+    }
+    return ret;
 }
 
 bool Analyzer::parseLine(std::vector<t_token> & line)
@@ -147,6 +163,10 @@ bool Analyzer::parseLine(std::vector<t_token> & line)
         return true;
     err.row = line.at(0).row;
     err.col = 0;
+    if (line.at(0).value == "exit")
+    {
+        this->_vexit.push_back(err.row);
+    }
     if (line.size() > 2)
     {
         err.mess = std::string("too many tokens on the same line");
@@ -159,9 +179,15 @@ bool Analyzer::parseLine(std::vector<t_token> & line)
         this->_errors.push_back(err);
         return false;
     }
+    if (line.size() == 1 && ( line.at(0).value == "push" || line.at(0).value == "assert" ) )
+    {
+        err.mess = std::string("expecting a value like [int32() double() float() ...]");
+        this->_errors.push_back(err);
+        return false;
+    }
     if (line.size() == 2 && line.at(0).value != "push" && line.at(0).value != "assert")
     {
-        err.mess = std::string("execting an ENDL after this instruction \x1b[32m") + line.at(0).value + std::string("\x1b[0m"); 
+        err.mess = std::string("expecting an ENDL after this instruction \x1b[32m") + line.at(0).value + std::string("\x1b[0m"); 
         this->_errors.push_back(err);
         return false;
     }
@@ -178,7 +204,7 @@ bool Analyzer::parseLine(std::vector<t_token> & line)
         std::regex re_N("(-?\\d*)");
         std::regex re_Z("(-?\\d*\\.\\d*)");
 
-        if (line.at(0).value == "double" || line.at(0).value == "float")
+        if (line.at(1).value == "double" || line.at(1).value == "float")
         {
             if (std::regex_match(val, sm, re_Z))
                 return true;
@@ -186,15 +212,28 @@ bool Analyzer::parseLine(std::vector<t_token> & line)
             this->_errors.push_back(err);
             return false;
         } else {
-             if (std::regex_match(val, sm, re_Z))
+             if (std::regex_match(val, sm, re_N))
                 return true;
             err.mess = std::string("expecting a value matching /-?[0-9]+/");
             this->_errors.push_back(err);
             return false;
         }
-        return true;
+        return false;
     }
     return true;
+}
+
+void Analyzer::put_tokens( void )
+{
+    std::vector<std::vector<t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
+    for (;it != ite; ++it)
+    {
+        std::cerr << "<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+        std::vector<t_token>::iterator itt = it->begin(), itte = it->end();
+        for (;itt != itte; ++itt)
+            itt->put();
+        std::cerr << ">>>>>>>>>>>>>>>>>>>>>>>" << std::endl;
+    }
 }
 
 void Analyzer::t_error::put( const char * name )
@@ -206,7 +245,7 @@ void Analyzer::t_error::put( const char * name )
 
 void Analyzer::t_token::put(void)
 {
-    std::cout << "{" << std::endl << "\
+    std::cerr << "{" << std::endl << "\
     type: " << this->type << std::endl << "\
     value: " << this->value << std::endl << "\
     arg: " << this->arg << std::endl << "\

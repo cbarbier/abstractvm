@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:51:53 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/19 15:43:15 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/24 09:05:15 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,8 @@ const char* AbstractVM::Overflow::what() const throw()
 const char* AbstractVM::DivByZero::what() const throw()
 {
     return "Division by zero";
+}
+const char* AbstractVM::ModByZero::what() const throw()
+{
+    return "Modulo by zero";
 }

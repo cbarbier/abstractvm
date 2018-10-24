@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:48:58 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/19 13:01:19 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/24 09:05:16 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ public:
          virtual const char* what() const throw ();
     };
     struct DivByZero: public std::exception{
+         virtual const char* what() const throw ();
+    };
+    struct ModByZero: public std::exception{
          virtual const char* what() const throw ();
     };
 
