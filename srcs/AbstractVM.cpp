@@ -15,6 +15,22 @@
 #include <iostream>
 #include <fstream>
 
+
+t_instr         AbstractVM::_instructions[] = {
+        { "push", 1, &AbstractVM::instr_push },
+        { "pop", 0, &AbstractVM::instr_pop },
+        { "dump", 0, &AbstractVM::instr_dump },
+        { "assert", 1, &AbstractVM::instr_assert },
+        { "add", 0, &AbstractVM::instr_add },
+        { "sub", 0, &AbstractVM::instr_sub },
+        { "mul", 0, &AbstractVM::instr_mul },
+        { "div", 0, &AbstractVM::instr_div },
+        { "mod", 0, &AbstractVM::instr_mod },
+        { "print", 0, &AbstractVM::instr_print },
+        { "exit", 0, &AbstractVM::instr_exit },
+        { "", 0, 0 }
+    ;}
+
 AbstractVM::AbstractVM(char *pfile) : _pfile(pfile)
 {
     if (!pfile)
@@ -62,6 +78,62 @@ std::vector<std::string> &AbstractVM::getLines(void)
 AbstractVM::~AbstractVM()
 {
 }
+
+void        AbstractVM::instr_push( void )
+{
+
+}
+
+void        AbstractVM::instr_pop( void )
+{
+
+}
+
+void        AbstractVM::instr_dump( void )
+{
+
+}
+
+void        AbstractVM::instr_assert( void )
+{
+
+}
+
+void        AbstractVM::instr_add( void )
+{
+
+}
+
+void        AbstractVM::instr_sub( void )
+{
+
+}
+
+void        AbstractVM::instr_mul( void )
+{
+
+}
+
+void        AbstractVM::instr_div( void )
+{
+
+}
+
+void        AbstractVM::instr_mod( void )
+{
+
+}
+
+void        AbstractVM::instr_print( void )
+{
+
+}
+
+void        AbstractVM::instr_exit( void )
+{
+
+}
+
 
 const char* AbstractVM::MyException::what() const throw()
 {

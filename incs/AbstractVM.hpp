@@ -16,6 +16,8 @@
 #include <vector>
 #include <string>
 
+
+
 class AbstractVM
 {
 public:
@@ -49,6 +51,15 @@ private:
 
     char    * _pfile;
     std::vector<std::string> _lines;
+    
+    typedef struct s_instr {
+        std::string name;
+        char        value;
+        void        (*f)( void );
+    }
+
+    t_instr     _instructions[];
+        
 };
 
 #endif // !ABSTRACTVM_HPP
