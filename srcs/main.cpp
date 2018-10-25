@@ -22,9 +22,10 @@ int         main( int argc, char **argv)
     // std::cout << std::numeric_limits<double>::max() << std::endl;
     // std::cout << std::numeric_limits<long double>::max() << std::endl;
     // std::cout << std::numeric_limits<double>::min() << std::endl;
-    if (argc > 2)
+    if ( argc > 2 )
     {
         std::cerr << "Usage: ./abstractVM [filename]" << std::endl;
+        return( 1 );
     }
     AbstractVM vm( argc == 2 ? argv[1] : 0);
     Analyzer      analyzer;
@@ -34,5 +35,6 @@ int         main( int argc, char **argv)
     if (!analyzer.parse()) // PARSER CHECKING THE SYNTAX OF THE ENTIRE PROGRAM
         return (1);
     analyzer.put_tokens();
+    vm.exec(analyzer.getTokens());
     return (0);
 }

@@ -236,6 +236,12 @@ void Analyzer::put_tokens( void )
     }
 }
 
+std::vector<std::vector<t_token> > &Analyzer::getTokens( void )
+{
+    return this->_ltokens;
+}
+
+
 void Analyzer::t_error::put( const char * name ) const
 {
     std::cerr << std::endl

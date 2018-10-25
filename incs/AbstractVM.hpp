@@ -24,7 +24,7 @@ typedef struct s_instr
 {
     std::string name;
     char value;
-    void (AbstractVM::*f)(void);
+    void (AbstractVM::*f)(IOperand *);
 } t_instr;
 
 class AbstractVM
@@ -54,6 +54,10 @@ class AbstractVM
     {
         virtual const char *what() const throw();
     };
+    struct ArithmeticNeedsTwoOperands : public std::exception
+    {
+        virtual const char *what() const throw();
+    };
 
 
 
@@ -71,20 +75,23 @@ class AbstractVM
     char *_pfile;
     std::vector<std::string> _lines;
     std::deque<IOperand *> _deque;
+    std::vector<std::vector<t_token> > _ltokens;
 
     static t_instr _instructions[12];
 
-    void instr_push(void);
-    void instr_pop(void);
-    void instr_dump(void);
-    void instr_assert(void);
-    void instr_add(void);
-    void instr_sub(void);
-    void instr_mul(void);
-    void instr_div(void);
-    void instr_mod(void);
-    void instr_print(void);
-    void instr_exit(void);
+    void exec(std::vector<std::vector<t_token> > &tokens);
+
+    void instr_push( IOperand * );
+    void instr_pop( IOperand * );
+    void instr_dump( IOperand * );
+    void instr_assert( IOperand * );
+    void instr_add( IOperand * );
+    void instr_sub( IOperand * );
+    void instr_mul( IOperand * );
+    void instr_div( IOperand * );
+    void instr_mod( IOperand * );
+    void instr_print( IOperand * );
+    void instr_exit( IOperand * );
 };
 
 #endif // !ABSTRACTVM_HPP

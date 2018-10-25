@@ -58,6 +58,7 @@ class Analyzer
     bool lex( std::vector<std::string> &lines );
     bool parse( void );
     void put_tokens( void );
+    std::vector<std::vector<t_token> > &getTokens( void );
 
   private:
     bool tokenize(std::vector<std::string> &lines);

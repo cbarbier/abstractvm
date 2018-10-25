@@ -101,11 +101,12 @@ void        AbstractVM::instr_dump( void )
 
 void        AbstractVM::instr_assert( void )
 {
-
 }
 
 void        AbstractVM::instr_add( void )
 {
+    if ( this->_deque.size() < 2 )
+
 
 }
 
@@ -139,6 +140,32 @@ void        AbstractVM::instr_exit( void )
 
 }
 
+void        AbstractVM::exec( std::vector<std::vector<t_token> > &tokens )
+{
+    Utils   utils;
+    size_t i, itype;
+    IOperand *ptr_ope;
+    static std::string types[5] = { "int8", "int16", "int32", "float", "double" };
+    std::vector<std::vector<t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
+    for (;it != ite; ++it)
+    {
+        // std::vector<t_token>::iterator itt = it->begin();
+        i = 0;
+        while (AbstractVM::_instructions[i].name != it->at(0).value)
+            i++;
+        if ( AbstractVM::_instructions[i].value ) // takes a value as second token
+        {
+            type = 0;
+            while (types[itype] != it->at(1).value)
+                itype++;
+            ptr_ope = utils.createOperand( static_cast<eOperandType>(itype), it->at(1).arg);
+            AbstractVM::_instructions[i].f(ptr_ope);
+        }
+        else
+            AbstractVM::_instructions[i].f(0);
+
+    }
+}
 
 const char* AbstractVM::MyException::what() const throw()
 {
@@ -164,3 +191,9 @@ const char* AbstractVM::PopOnEmptyStack::what() const throw()
 {
     return "Pop on empty stack";
 }
+const char* AbstractVM::ArithmeticNeedsTwoOperands::what() const throw()
+{
+    return "Pop on empty stack";
+}
+
+
