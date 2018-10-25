@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:51:53 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/24 09:05:15 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/25 09:30:33 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_instr         AbstractVM::_instructions[] = {
         { "print", 0, &AbstractVM::instr_print },
         { "exit", 0, &AbstractVM::instr_exit },
         { "", 0, 0 }
-    ;}
+    };
 
 AbstractVM::AbstractVM(char *pfile) : _pfile(pfile)
 {
@@ -86,12 +86,17 @@ void        AbstractVM::instr_push( void )
 
 void        AbstractVM::instr_pop( void )
 {
-
+    if (this->_deque.size() < 2)
+        throw AbstractVM::PopOnEmptyStack();
 }
 
 void        AbstractVM::instr_dump( void )
 {
+    std::deque<IOperand *>::iterator        it = this->_deque.begin();
+    std::deque<IOperand *>::iterator        ite = this->_deque.end();
 
+    for(;it != ite; ++it)
+        std::cout << (*it)->toString << std::endl;
 }
 
 void        AbstractVM::instr_assert( void )
@@ -154,4 +159,8 @@ const char* AbstractVM::DivByZero::what() const throw()
 const char* AbstractVM::ModByZero::what() const throw()
 {
     return "Modulo by zero";
+}
+const char* AbstractVM::PopOnEmptyStack::what() const throw()
+{
+    return "Pop on empty stack";
 }

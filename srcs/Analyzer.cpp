@@ -236,14 +236,14 @@ void Analyzer::put_tokens( void )
     }
 }
 
-void Analyzer::t_error::put( const char * name )
+void Analyzer::t_error::put( const char * name ) const
 {
     std::cerr << std::endl
               << "> " << this->line.substr(0, this->col) << "\x1b[35m" << this->line.substr(this->col, this->eow - this->col) << "\x1b[0m" << this->line.substr(this->eow) << std::endl;
     std::cerr << "Error: " << name << ": [" << this->row << ":" << this->col << "] " << this->mess << std::endl;
 }
 
-void Analyzer::t_token::put(void)
+void Analyzer::t_token::put(void) const
 {
     std::cerr << "{" << std::endl << "\
     type: " << this->type << std::endl << "\

@@ -38,7 +38,7 @@ class Analyzer
         std::string arg;
         size_t      row;
 
-        void put(void);
+        void put(void) const;
     } t_token;
     typedef struct s_error
     {
@@ -48,7 +48,7 @@ class Analyzer
         std::string mess;
         std::string line;
 
-        void put(const char * name);
+        void put(const char * name) const;
     } t_error;
 
 
