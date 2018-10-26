@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:48:58 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/25 09:11:05 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/26 10:33:16 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define ABSTRACTVM_HPP
 
 #include <IOperand.hpp>
+#include <Analyzer.hpp>
 #include <deque>
 #include <vector>
 #include <string>
@@ -24,7 +25,7 @@ typedef struct s_instr
 {
     std::string name;
     char value;
-    void (AbstractVM::*f)(IOperand *);
+    void (AbstractVM::*f)(const IOperand *, size_t row);
 } t_instr;
 
 class AbstractVM
@@ -50,7 +51,11 @@ class AbstractVM
     {
         virtual const char *what() const throw();
     };
-    struct PopOnEmptyStack : public std::exception
+    struct PopEmptyStack : public std::exception
+    {
+        virtual const char *what() const throw();
+    };
+    struct AssertEmptyStack : public std::exception
     {
         virtual const char *what() const throw();
     };
@@ -68,30 +73,30 @@ class AbstractVM
 
     std::vector<std::string> &getLines(void);
     void getInput(std::istream &);
+    void exec(std::vector<std::vector<Analyzer::t_token> > &tokens);
 
   private:
     AbstractVM();
 
     char *_pfile;
     std::vector<std::string> _lines;
-    std::deque<IOperand *> _deque;
-    std::vector<std::vector<t_token> > _ltokens;
+    std::deque<const IOperand *> _deque;
+    std::vector<std::vector<Analyzer::t_token> > _ltokens;
 
     static t_instr _instructions[12];
 
-    void exec(std::vector<std::vector<t_token> > &tokens);
 
-    void instr_push( IOperand * );
-    void instr_pop( IOperand * );
-    void instr_dump( IOperand * );
-    void instr_assert( IOperand * );
-    void instr_add( IOperand * );
-    void instr_sub( IOperand * );
-    void instr_mul( IOperand * );
-    void instr_div( IOperand * );
-    void instr_mod( IOperand * );
-    void instr_print( IOperand * );
-    void instr_exit( IOperand * );
+    void instr_push( const IOperand *, size_t );
+    void instr_pop( const IOperand *, size_t );
+    void instr_dump( const IOperand *, size_t );
+    void instr_assert( const IOperand *, size_t );
+    void instr_add( const IOperand *, size_t );
+    void instr_sub( const IOperand *, size_t );
+    void instr_mul( const IOperand *, size_t );
+    void instr_div( const IOperand *, size_t );
+    void instr_mod( const IOperand *, size_t );
+    void instr_print( const IOperand *, size_t );
+    void instr_exit( const IOperand *, size_t );
 };
 
 #endif // !ABSTRACTVM_HPP

@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/18 12:04:26 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/23 09:23:31 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/26 10:33:11 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,20 @@ Operand<T> & Operand<T>::operator=( Operand<T> const & rhs )
     return *this;
 }
 
-template<class T> Operand<T>::Operand( T value )
+template<class T>
+T Operand<T>::getValue( void ) const
+{
+    return this->_value;
+}
+
+template<class T> 
+Operand<T>::Operand( T value )
 {
     this->_value = value;
 }
 
-template<class T> Operand<T>::Operand( std::string & str )
+template<class T>
+Operand<T>::Operand( std::string & str )
 {
     long double ld;
     T      val;

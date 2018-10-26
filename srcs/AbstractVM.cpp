@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:51:53 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/25 09:30:33 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/26 10:33:18 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,90 +79,162 @@ AbstractVM::~AbstractVM()
 {
 }
 
-void        AbstractVM::instr_push( void )
+void        AbstractVM::instr_push( const IOperand * ptr_ope, size_t row )
 {
-
+    static_cast<void>(row);
+    this->_deque.push_back(ptr_ope);
 }
 
-void        AbstractVM::instr_pop( void )
+void        AbstractVM::instr_pop( const IOperand * ptr_ope, size_t row )
 {
-    if (this->_deque.size() < 2)
-        throw AbstractVM::PopOnEmptyStack();
+    if ( this->_deque.size() == 0 )
+        throw AbstractVM::PopEmptyStack();
+    delete this->_deque.back();
+    this->_deque.pop_back();
 }
 
-void        AbstractVM::instr_dump( void )
+void        AbstractVM::instr_dump( const IOperand * ptr_ope, size_t row )
 {
-    std::deque<IOperand *>::iterator        it = this->_deque.begin();
-    std::deque<IOperand *>::iterator        ite = this->_deque.end();
+    std::deque<const IOperand *>::iterator        it = this->_deque.begin();
+    std::deque<const IOperand *>::iterator        ite = this->_deque.end();
 
     for(;it != ite; ++it)
         std::cout << (*it)->toString << std::endl;
 }
 
-void        AbstractVM::instr_assert( void )
+void        AbstractVM::instr_assert( const IOperand * ptr_ope, size_t row )
 {
+    if ( this->_deque.size() == 0 )
+        throw AbstractVM::PopEmptyStack();
+    if (ptr_ope->getType != this->_deque.back()->getType())
+    {
+        std::cerr << "Error: bas Assert on line" << row << std::endl;
+        this->instr_exit(0, 0);
+    }
 }
 
-void        AbstractVM::instr_add( void )
+void        AbstractVM::instr_add( const IOperand * ptr_ope, size_t row )
 {
+    const IOperand *p1, *p2;
+    static_cast<void>(row);
+    static_cast<void>(ptr_ope);
     if ( this->_deque.size() < 2 )
-
-
+        throw AbstractVM::AbstractVM::ArithmeticNeedsTwoOperands();
+    p2 = this->_deque.back();
+    this->_deque.pop_back();
+    p1 = this->_deque.back();
+    this->_deque.pop_back();
+    this->_deque.push_back((*p1) + (*p2));
+    delete p1;
+    delete p2;
 }
-
-void        AbstractVM::instr_sub( void )
+ 
+void        AbstractVM::instr_sub( const IOperand * ptr_ope, size_t row )
 {
-
+    const IOperand *p1, *p2;
+    static_cast<void>(row);
+    static_cast<void>(ptr_ope);
+    if ( this->_deque.size() < 2 )
+        throw AbstractVM::AbstractVM::ArithmeticNeedsTwoOperands();
+    p2 = this->_deque.back();
+    this->_deque.pop_back();
+    p1 = this->_deque.back();
+    this->_deque.pop_back();
+    this->_deque.push_back((*p1) + (*p2));
+    delete p1;
+    delete p2;
 }
 
-void        AbstractVM::instr_mul( void )
+void        AbstractVM::instr_mul( const IOperand * ptr_ope, size_t row )
 {
-
+     const IOperand *p1, *p2;
+    static_cast<void>(row);
+    static_cast<void>(ptr_ope);
+    if ( this->_deque.size() < 2 )
+        throw AbstractVM::AbstractVM::ArithmeticNeedsTwoOperands();
+    p2 = this->_deque.back();
+    this->_deque.pop_back();
+    p1 = this->_deque.back();
+    this->_deque.pop_back();
+    this->_deque.push_back((*p1) * (*p2));
+    delete p1;
+    delete p2;
 }
 
-void        AbstractVM::instr_div( void )
+void        AbstractVM::instr_div( const IOperand * ptr_ope, size_t row )
 {
-
+    const IOperand *p1, *p2;
+    static_cast<void>(row);
+    static_cast<void>(ptr_ope);
+    if ( this->_deque.size() < 2 )
+        throw AbstractVM::AbstractVM::ArithmeticNeedsTwoOperands();
+    p2 = this->_deque.back();
+    this->_deque.pop_back();
+    p1 = this->_deque.back();
+    this->_deque.pop_back();
+    this->_deque.push_back((*p1) / (*p2));
+    delete p1;
+    delete p2;
 }
 
-void        AbstractVM::instr_mod( void )
+void        AbstractVM::instr_mod( const IOperand * ptr_ope, size_t row )
 {
-
+   const IOperand *p1, *p2;
+    static_cast<void>(row);
+    static_cast<void>(ptr_ope);
+    if ( this->_deque.size() < 2 )
+        throw AbstractVM::AbstractVM::ArithmeticNeedsTwoOperands();
+    p2 = this->_deque.back();
+    this->_deque.pop_back();
+    p1 = this->_deque.back();
+    this->_deque.pop_back();
+    this->_deque.push_back((*p1) % (*p2));
+    delete p1;
+    delete p2;
 }
 
-void        AbstractVM::instr_print( void )
+void        AbstractVM::instr_print( const IOperand * ptr_ope, size_t row )
 {
-
+    static_cast<void>(ptr_ope);
+    if ( ptr_ope->getType != Int8 )
+    {
+        this->instr_exit(0, row);
+    }
 }
 
-void        AbstractVM::instr_exit( void )
+void        AbstractVM::instr_exit( const IOperand * ptr_ope, size_t row )
 {
-
+    static_cast<void>(ptr_ope);
+    static_cast<void>(row);
+    std::exit(0);
 }
 
-void        AbstractVM::exec( std::vector<std::vector<t_token> > &tokens )
+void        AbstractVM::exec( std::vector<std::vector<Analyzer::t_token> > &tokens )
 {
     Utils   utils;
-    size_t i, itype;
-    IOperand *ptr_ope;
+    size_t i, itype, row;
+    const IOperand *ptr_ope;
     static std::string types[5] = { "int8", "int16", "int32", "float", "double" };
-    std::vector<std::vector<t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
+    std::vector<std::vector<Analyzer::t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
     for (;it != ite; ++it)
     {
+        if (!it->size())
+            continue;
         // std::vector<t_token>::iterator itt = it->begin();
+        row = it->at(0).row;
         i = 0;
         while (AbstractVM::_instructions[i].name != it->at(0).value)
             i++;
         if ( AbstractVM::_instructions[i].value ) // takes a value as second token
         {
-            type = 0;
+            itype = 0;
             while (types[itype] != it->at(1).value)
                 itype++;
             ptr_ope = utils.createOperand( static_cast<eOperandType>(itype), it->at(1).arg);
-            AbstractVM::_instructions[i].f(ptr_ope);
+            (this->*AbstractVM::_instructions[i].f)(ptr_ope, row);
         }
         else
-            AbstractVM::_instructions[i].f(0);
+            (this->*AbstractVM::_instructions[i].f)(0, row);
 
     }
 }
@@ -187,13 +259,17 @@ const char* AbstractVM::ModByZero::what() const throw()
 {
     return "Modulo by zero";
 }
-const char* AbstractVM::PopOnEmptyStack::what() const throw()
+const char* AbstractVM::PopEmptyStack::what() const throw()
 {
-    return "Pop on empty stack";
+    return "Pop Empty stack";
 }
-const char* AbstractVM::ArithmeticNeedsTwoOperands::what() const throw()
+const char* AbstractVM::AssertEmptyStack::what() const throw()
 {
-    return "Pop on empty stack";
+    return "Assert Empty stack";
 }
+// const char* AbstractVM::ArithmeticNeedsTwoOperands::what() const throw()
+// {
+//     return "Pop on empty stack";
+// }
 
 

@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/18 10:05:27 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/19 11:30:13 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/26 10:33:30 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class Operand : public IOperand
     IOperand const *operator/(IOperand const &rhs) const;
     IOperand const *operator%(IOperand const &rhs) const;
     std::string const &toString(void) const;              // String representation of the instance;
+    T getValue( void ) const;
 
   private:
     T      _value;

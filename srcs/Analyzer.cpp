@@ -236,7 +236,7 @@ void Analyzer::put_tokens( void )
     }
 }
 
-std::vector<std::vector<t_token> > &Analyzer::getTokens( void )
+std::vector<std::vector<Analyzer::t_token> > &Analyzer::getTokens( void )
 {
     return this->_ltokens;
 }
