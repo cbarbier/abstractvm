@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/18 12:04:26 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/26 10:33:11 by cbarbier         ###   ########.fr       */
+/*   Updated: 2018/10/29 09:20:54 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,15 @@ IOperand const *Operand<T>::operator/(IOperand const &rhs) const {
         throw AbstractVM::DivByZero();
     eOperandType type = (this->getPrecision() < rhs.getPrecision() ? rhs.getType() : this->getType());
     return utils.createOperand(type, std::to_string(this->_value / ld));
+}
+
+template<class T>
+IOperand const *Operand<T>::operator%(IOperand const &rhs) const {
+    Utils       utils;
+    long double ld = std::stold(rhs.toString());
+
+    if (!ld)
+        throw AbstractVM::ModByZero();
+    eOperandType type = (this->getPrecision() < rhs.getPrecision() ? rhs.getType() : this->getType());
+    return utils.createOperand(type, std::to_string(this->_value % ld));
 }

@@ -19,7 +19,7 @@
 class Utils
 {
   public:
-    virtual ~Utils(){}
+    virtual ~Utils( void ){}
 
     static std::string& ltrim(std::string& str, const std::string& chars = "\n");
     static std::string& rtrim(std::string& str, const std::string& chars = "\n");
