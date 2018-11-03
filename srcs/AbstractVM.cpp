@@ -77,6 +77,12 @@ std::vector<std::string> &AbstractVM::getLines(void)
 
 AbstractVM::~AbstractVM()
 {
+    std::deque<const IOperand *>::iterator        it = this->_deque.begin();
+    std::deque<const IOperand *>::iterator        ite = this->_deque.end();
+
+    for(;it != ite; ++it)
+        delete (*it);
+    this->_lines.clear();
 }
 
 void        AbstractVM::instr_push( const IOperand * ptr_ope, size_t row )
@@ -87,6 +93,8 @@ void        AbstractVM::instr_push( const IOperand * ptr_ope, size_t row )
 
 void        AbstractVM::instr_pop( const IOperand * ptr_ope, size_t row )
 {
+    static_cast<void>(ptr_ope);
+    static_cast<void>(row);
     if ( this->_deque.size() == 0 )
         throw AbstractVM::PopEmptyStack();
     delete this->_deque.back();
@@ -95,18 +103,20 @@ void        AbstractVM::instr_pop( const IOperand * ptr_ope, size_t row )
 
 void        AbstractVM::instr_dump( const IOperand * ptr_ope, size_t row )
 {
+    static_cast<void>(ptr_ope);
+    static_cast<void>(row);
     std::deque<const IOperand *>::iterator        it = this->_deque.begin();
     std::deque<const IOperand *>::iterator        ite = this->_deque.end();
 
     for(;it != ite; ++it)
-        std::cout << (*it)->toString << std::endl;
+        std::cout << (*it)->toString() << std::endl;
 }
 
 void        AbstractVM::instr_assert( const IOperand * ptr_ope, size_t row )
 {
     if ( this->_deque.size() == 0 )
         throw AbstractVM::PopEmptyStack();
-    if (ptr_ope->getType != this->_deque.back()->getType())
+    if (ptr_ope->getType() != this->_deque.back()->getType())
     {
         std::cerr << "Error: bas Assert on line" << row << std::endl;
         this->instr_exit(0, 0);
@@ -196,10 +206,16 @@ void        AbstractVM::instr_mod( const IOperand * ptr_ope, size_t row )
 void        AbstractVM::instr_print( const IOperand * ptr_ope, size_t row )
 {
     static_cast<void>(ptr_ope);
-    if ( ptr_ope->getType != Int8 )
+    if ( ptr_ope->getType() != Int8 )
     {
         this->instr_exit(0, row);
     }
+
+    char c = static_cast<char>(std::stoi(ptr_ope->toString()));
+    if (c > 31)
+        std::cout << c << std::endl;
+    else
+        std::cout << "non displayable character (" << ptr_ope->toString() << ")" << std::endl;
 }
 
 void        AbstractVM::instr_exit( const IOperand * ptr_ope, size_t row )
@@ -209,15 +225,17 @@ void        AbstractVM::instr_exit( const IOperand * ptr_ope, size_t row )
     std::exit(0);
 }
 
-void        AbstractVM::exec( std::vector<std::vector<Analyzer::t_token> > &tokens )
+void        AbstractVM::exec( std::vector<std::vector<Analyzer::t_token> > tokens )
 {
     Utils   utils;
     size_t i, itype, row;
     const IOperand *ptr_ope;
     static std::string types[5] = { "int8", "int16", "int32", "float", "double" };
-    std::vector<std::vector<Analyzer::t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
+    // std::vector<std::vector<Analyzer::t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
+    std::vector<std::vector<Analyzer::t_token> >::iterator it = tokens.begin(), ite = tokens.end();
     for (;it != ite; ++it)
     {
+        this->debug();
         if (!it->size())
             continue;
         // std::vector<t_token>::iterator itt = it->begin();
@@ -235,8 +253,20 @@ void        AbstractVM::exec( std::vector<std::vector<Analyzer::t_token> > &toke
         }
         else
             (this->*AbstractVM::_instructions[i].f)(0, row);
-
     }
+}
+
+void        AbstractVM::debug( void )
+{
+    std::deque<const IOperand *>::reverse_iterator        it = this->_deque.rbegin();
+    std::deque<const IOperand *>::reverse_iterator        ite = this->_deque.rend();
+
+    std::cout << "-------- n:" << this->_deque.size() << std::endl;
+    if (!this->_deque.size())
+        std::cout << "| empty" << std::endl;
+    for(;it != ite; ++it)
+        std::cout << "| " << (*it)->toString() << std::endl;
+    std::cout << "--------" << std::endl;
 }
 
 const char* AbstractVM::MyException::what() const throw()
@@ -267,9 +297,8 @@ const char* AbstractVM::AssertEmptyStack::what() const throw()
 {
     return "Assert Empty stack";
 }
-// const char* AbstractVM::ArithmeticNeedsTwoOperands::what() const throw()
-// {
-//     return "Pop on empty stack";
-// }
-
+const char* AbstractVM::ArithmeticNeedsTwoOperands::what() const throw()
+{
+    return "Pop on empty stack";
+}
 

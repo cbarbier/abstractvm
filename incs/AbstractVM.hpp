@@ -73,7 +73,9 @@ class AbstractVM
 
     std::vector<std::string> &getLines(void);
     void getInput(std::istream &);
-    void exec(std::vector<std::vector<Analyzer::t_token> > &tokens);
+    void exec(std::vector<std::vector<Analyzer::t_token> > tokens);
+
+    void debug();
 
   private:
     AbstractVM();
@@ -81,7 +83,7 @@ class AbstractVM
     char *_pfile;
     std::vector<std::string> _lines;
     std::deque<const IOperand *> _deque;
-    std::vector<std::vector<Analyzer::t_token> > _ltokens;
+    // std::vector<std::vector<Analyzer::t_token> > _ltokens;
 
     static t_instr _instructions[12];
 

@@ -87,8 +87,8 @@ FRAMEWORKS =  \
 
 CFLAGS		= \
 			-Wall -Werror -Wextra -O2 -pedantic -Wunreachable-code -pedantic-errors	\
-			-fsanitize=address					\
 			-g3							\
+			-fsanitize=address					\
 
 
 # ---------------------------------------------------------------------------- #

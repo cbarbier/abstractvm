@@ -32,7 +32,7 @@ void Analyzer::chopLine(std::string &line, size_t h)
 
     // std::replace(line.begin(), line.end(), '\t', ' ');
     // ss << line;
-    std::cout << "h: " << h << std::endl;
+    // std::cout << "h: " << h << std::endl;
     t_error error;
     error.line = line;
 
@@ -47,7 +47,7 @@ void Analyzer::chopLine(std::string &line, size_t h)
         token.row = h;
         error.col = pos;
         error.eow = end;
-        std::cout << "[" << word << "]" << std::endl;
+        // std::cout << "[" << word << "]" << std::endl;
 
         if (std::regex_match(word, sm, re_instr))
         {
@@ -80,7 +80,7 @@ void Analyzer::chopLine(std::string &line, size_t h)
         {
             error.mess = std::string("Unknown token");
             this->_errors.push_back(error);
-            std::cout << "not a valid token" << std::endl;
+            // std::cout << "not a valid token" << std::endl;
         }
         if (end == std::string::npos)
             break;

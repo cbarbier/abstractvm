@@ -23,7 +23,7 @@ class Operand : public IOperand
     Operand(void);
     Operand( T val );
     Operand(const Operand &rhs);
-    Operand( std::string & );
+    Operand( const std::string & );
     Operand &operator=(const Operand &rhs);
     ~Operand(void);
     eOperandType getType(void) const;
