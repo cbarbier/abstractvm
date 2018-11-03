@@ -15,6 +15,7 @@
 #include <AbstractVM.hpp>
 #include <exception>
 #include <iostream>
+#include <sstream>
 #include <cmath>
 
 template <class T>
@@ -80,7 +81,10 @@ Operand<T>::Operand( const std::string & str )
 
 template<class T>
 std::string const & Operand<T>::toString( void ) const {
-	static std::string s = std::to_string(this->_value);
+	static std::string s = "";
+    std::stringstream ss;
+    ss << this->_value;
+    s = ss.str();
     return s;
 }
 

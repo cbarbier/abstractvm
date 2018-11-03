@@ -105,8 +105,8 @@ void        AbstractVM::instr_dump( const IOperand * ptr_ope, size_t row )
 {
     static_cast<void>(ptr_ope);
     static_cast<void>(row);
-    std::deque<const IOperand *>::iterator        it = this->_deque.begin();
-    std::deque<const IOperand *>::iterator        ite = this->_deque.end();
+    std::deque<const IOperand *>::reverse_iterator        it = this->_deque.rbegin();
+    std::deque<const IOperand *>::reverse_iterator        ite = this->_deque.rend();
 
     for(;it != ite; ++it)
         std::cout << (*it)->toString() << std::endl;
@@ -125,18 +125,17 @@ void        AbstractVM::instr_assert( const IOperand * ptr_ope, size_t row )
 
 void        AbstractVM::instr_add( const IOperand * ptr_ope, size_t row )
 {
-    const IOperand *p1, *p2;
+    const IOperand *p1, *p2, *res;
     static_cast<void>(row);
     static_cast<void>(ptr_ope);
     if ( this->_deque.size() < 2 )
         throw AbstractVM::AbstractVM::ArithmeticNeedsTwoOperands();
     p2 = this->_deque.back();
+    p1 = this->_deque.at(this->_deque.size() - 2);
+    res = (*p1) + (*p2);
     this->_deque.pop_back();
-    p1 = this->_deque.back();
     this->_deque.pop_back();
-    this->_deque.push_back((*p1) + (*p2));
-    delete p1;
-    delete p2;
+    this->_deque.push_back(res);
 }
  
 void        AbstractVM::instr_sub( const IOperand * ptr_ope, size_t row )
@@ -249,6 +248,7 @@ void        AbstractVM::exec( std::vector<std::vector<Analyzer::t_token> > token
             while (types[itype] != it->at(1).value)
                 itype++;
             ptr_ope = utils.createOperand( static_cast<eOperandType>(itype), it->at(1).arg);
+            // std::cout << AbstractVM::_instructions[i].name << " " << types[itype] << " " << ptr_ope->toString() << std::endl;
             (this->*AbstractVM::_instructions[i].f)(ptr_ope, row);
         }
         else
@@ -258,6 +258,8 @@ void        AbstractVM::exec( std::vector<std::vector<Analyzer::t_token> > token
 
 void        AbstractVM::debug( void )
 {
+    if (!DEBUG)
+        return;
     std::deque<const IOperand *>::reverse_iterator        it = this->_deque.rbegin();
     std::deque<const IOperand *>::reverse_iterator        ite = this->_deque.rend();
 

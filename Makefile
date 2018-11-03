@@ -51,6 +51,14 @@ SRCS = \
 		Analyzer.cpp					\
 		Operand.cpp						\
 
+
+HDRS = \
+		AbstractVM.hpp					\
+		Utils.hpp						\
+		Analyzer.hpp					\
+		Operand.hpp						\
+		IOperand.hpp					\
+
 # ---------------------------------------------------------------------------- #
 # /!\ COLOR FOR PRINTF /!\                                                     #
 # ---------------------------------------------------------------------------- #
@@ -100,6 +108,8 @@ COMPILE.cpp	= \
 
 C_SRCS = $(addprefix $(DIR_SRCS)/,$(SRCS))
 O_SRCS = $(addprefix $(DIR_OBJS)/,$(SRCS:.cpp=.o))
+H_HDRS = $(addprefix $(DIR_INCS)/,$(HDRS))
+
 
 $(DIR_OBJS)	:
 	@mkdir -p $(DIR_OBJS)
@@ -129,7 +139,7 @@ all : $(NAME)
 $(DIR_OBJS)/%.o	:	$(DIR_SRCS)/%.cpp
 	$(CC) $(CFLAGS) -c $< $(CPPFLAGS) $(LDFLAGS) $(LDLIBS)  $(FRAMEWORKS) -o $@
 			
-$(NAME)		: $(DIR_OBJS) $(O_SRCS) $(LIBS)
+$(NAME)		: $(DIR_OBJS) $(O_SRCS) $(LIBS) $(H_HDRS)
 	$(CC) $(O_SRCS) -o $(NAME) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $(FRAMEWORKS)
 
 clean		:

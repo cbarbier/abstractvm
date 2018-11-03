@@ -13,6 +13,8 @@
 #ifndef ABSTRACTVM_HPP
 #define ABSTRACTVM_HPP
 
+#define DEBUG 0
+
 #include <IOperand.hpp>
 #include <Analyzer.hpp>
 #include <deque>

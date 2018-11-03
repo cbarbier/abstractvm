@@ -141,15 +141,16 @@ bool Analyzer::parse( void )
     }
     if (!this->_vexit.size())
     {
-        std::cerr << "Error: Parser: there must be an EXIT instruction in the program" << std::endl;
+        std::cerr << "\x1b[31mError: \x1b[32mParser: \x1b[35mthere must be an EXIT instruction in the program\x1b[0m" << std::endl;
         return false;
     }
     if (this->_vexit.size() > 1)
     {
         std::vector<int>::iterator it_vexit = this->_vexit.begin(), ite_vexit = this->_vexit.end();
-        std::cerr << "Error: Parser: there is more than one  EXIT instruction in the program :" << std::endl;
+        std::cerr << "\x1b[31mError: \x1b[32mParser: \x1b[35mthere is more than one  EXIT instruction in the program :" << std::endl;
         for (; it_vexit != ite_vexit; ++it_vexit)
             std::cerr << "line " << *it_vexit  << std::endl;
+        std::cerr << "\x1b[0m";
         return false;
     }
     return ret;
@@ -199,7 +200,7 @@ bool Analyzer::parseLine(std::vector<t_token> & line)
             this->_errors.push_back(err);
             return false;
         }
-        std::string val;
+        std::string val = line.at(1).arg;
         std::smatch sm;
         std::regex re_N("(-?\\d*)");
         std::regex re_Z("(-?\\d*\\.\\d*)");
@@ -225,6 +226,8 @@ bool Analyzer::parseLine(std::vector<t_token> & line)
 
 void Analyzer::put_tokens( void )
 {
+    if (!DEBUG)
+        return;
     std::vector<std::vector<t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
     for (;it != ite; ++it)
     {
@@ -246,7 +249,7 @@ void Analyzer::t_error::put( const char * name ) const
 {
     std::cerr << std::endl
               << "> " << this->line.substr(0, this->col) << "\x1b[35m" << this->line.substr(this->col, this->eow - this->col) << "\x1b[0m" << this->line.substr(this->eow) << std::endl;
-    std::cerr << "Error: " << name << ": [" << this->row << ":" << this->col << "] " << this->mess << std::endl;
+    std::cerr << "\x1b[31mError: \x1b[32m" << name << "\x1b[0m: [" << this->row << ":" << this->col << "] \x1b[35m" << this->mess << "\x1b[0m" << std::endl;
 }
 
 void Analyzer::t_token::put(void) const
