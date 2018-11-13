@@ -50,6 +50,7 @@ SRCS = \
 		Utils.cpp						\
 		Analyzer.cpp					\
 		Operand.cpp						\
+		AVMException.cpp				\
 
 
 HDRS = \
@@ -58,6 +59,7 @@ HDRS = \
 		Analyzer.hpp					\
 		Operand.hpp						\
 		IOperand.hpp					\
+		AVMException.hpp				\
 
 # ---------------------------------------------------------------------------- #
 # /!\ COLOR FOR PRINTF /!\                                                     #

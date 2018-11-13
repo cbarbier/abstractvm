@@ -15,6 +15,7 @@
 
 #define DEBUG 0
 
+#include <AVMException.hpp>
 #include <IOperand.hpp>
 #include <Analyzer.hpp>
 #include <deque>
@@ -33,13 +34,15 @@ typedef struct s_instr
 class AbstractVM
 {
   public:
-    struct MyException : public std::exception
+    struct MyException : public AVMException
     {
+        MyException( std::string mess ): AVMException(mess){};
         virtual const char *what() const throw();
     };
-    struct Underflow : public std::exception
+    struct Underflow : public AVMException
     {
-        virtual const char *what() const throw();
+        Underflow( std::string mess ): AVMException(mess){};
+        const char *what() const throw();
     };
     struct Overflow : public std::exception
     {
@@ -58,6 +61,10 @@ class AbstractVM
         virtual const char *what() const throw();
     };
     struct AssertEmptyStack : public std::exception
+    {
+        virtual const char *what() const throw();
+    };
+    struct PrintEmptyStack : public std::exception
     {
         virtual const char *what() const throw();
     };
@@ -87,7 +94,7 @@ class AbstractVM
     std::deque<const IOperand *> _deque;
     // std::vector<std::vector<Analyzer::t_token> > _ltokens;
 
-    static t_instr _instructions[12];
+    static t_instr _instructions[15];
 
 
     void instr_push( const IOperand *, size_t );
@@ -101,6 +108,9 @@ class AbstractVM
     void instr_mod( const IOperand *, size_t );
     void instr_print( const IOperand *, size_t );
     void instr_exit( const IOperand *, size_t );
+    void instr_and( const IOperand *, size_t );
+    void instr_or( const IOperand *, size_t );
+    void instr_xor( const IOperand *, size_t );
 };
 
 #endif // !ABSTRACTVM_HPP

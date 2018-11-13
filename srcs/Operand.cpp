@@ -71,11 +71,11 @@ Operand<T>::Operand( const std::string & str )
 {
     long double ld;
     if (!Utils::is_number(str, &ld))
-        throw AbstractVM::MyException();
+        throw AbstractVM::MyException(std::string("Not a Valid Number"));
     if (std::numeric_limits<T>::max() < ld)
         throw AbstractVM::Overflow();
     if (std::numeric_limits<T>::min() > ld)
-        throw AbstractVM::Underflow();
+        throw AbstractVM::Underflow(std::string("Underflow"));
     this->_value = static_cast<T>(ld);
 }
 
@@ -136,7 +136,43 @@ IOperand const *Operand<T>::operator%(IOperand const &rhs) const {
     if (!ld)
         throw AbstractVM::ModByZero();
     eOperandType type = (this->getType() < rhs.getType() ? rhs.getType() : this->getType());
-    return utils.createOperand(type, std::to_string(this->_value % static_cast<int>(ld)));   
+    return utils.createOperand(type, std::to_string(fmod(static_cast<double>(this->_value), static_cast<double>(ld))));   
+}
+
+template<class T>
+IOperand const *Operand<T>::operator&(IOperand const &rhs) const {
+    Utils       utils;
+    long int llr = std::stoll(rhs.toString());
+    long int lll = static_cast<long int>(this->_value);
+
+    if (this->getType() > Int32 || rhs.getType() > Int32)
+        throw AbstractVM::MyException(std::string("Binary operator must be of intergral types"));
+    eOperandType type = (this->getType() > rhs.getType() ? this->getType() : rhs.getType());
+    return utils.createOperand(type, std::to_string((lll & llr)));
+}
+
+template<class T>
+IOperand const *Operand<T>::operator|(IOperand const &rhs) const {
+    Utils       utils;
+    long int llr = std::stoll(rhs.toString());
+    long int lll = static_cast<long int>(this->_value);
+
+    if (this->getType() > Int32 || rhs.getType() > Int32)
+        throw AbstractVM::MyException(std::string("Binary operator must be of intergral types"));
+    eOperandType type = (this->getType() > rhs.getType() ? this->getType() : rhs.getType());
+    return utils.createOperand(type, std::to_string((lll | llr)));
+}
+
+template<class T>
+IOperand const *Operand<T>::operator^(IOperand const &rhs) const {
+    Utils       utils;
+    long int llr = std::stoll(rhs.toString());
+    long int lll = static_cast<long int>(this->_value);
+
+    if (this->getType() > Int32 || rhs.getType() > Int32)
+        throw AbstractVM::MyException(std::string("Binary operator must be of intergral types"));
+    eOperandType type = (this->getType() > rhs.getType() ? this->getType() : rhs.getType());
+    return utils.createOperand(type, std::to_string((lll ^ llr)));
 }
 
 
@@ -144,6 +180,15 @@ template<>
 eOperandType	Operand<int8_t>::getType( void ) const			
 {
     return Int8;
+}
+
+template<>
+std::string const & Operand<int8_t>::toString( void ) const {
+	static std::string s = "";
+    std::stringstream ss;
+    ss << static_cast<int>(this->_value);
+    s = ss.str();
+    return s;
 }
 
 template<>
@@ -170,27 +215,7 @@ eOperandType	Operand<double>::getType( void ) const
     return Double;
 }
 
-template<>
-IOperand const *Operand<float>::operator%(IOperand const &rhs) const {
-    Utils       utils;
-    long double ld = std::stold(rhs.toString());
 
-    if (!ld)
-        throw AbstractVM::ModByZero();
-    eOperandType type = (this->getType() < rhs.getType() ? rhs.getType() : this->getType());
-    return utils.createOperand(type, std::to_string(fmod(static_cast<long double>(this->_value), static_cast<int>(ld))));   
-}
-
-template<>
-IOperand const *Operand<double>::operator%(IOperand const &rhs) const {
-    Utils       utils;
-    long double ld = std::stold(rhs.toString());
-
-    if (!ld)
-        throw AbstractVM::ModByZero();
-    eOperandType type = (this->getType() < rhs.getType() ? rhs.getType() : this->getType());
-    return utils.createOperand(type, std::to_string(fmod(static_cast<long double>(this->_value), static_cast<int>(ld))));   
-}
 
 template class Operand<double>;
 template class Operand<float>;

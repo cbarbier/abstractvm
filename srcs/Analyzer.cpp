@@ -27,7 +27,7 @@ void Analyzer::chopLine(std::string &line, size_t h)
     std::string word;
     std::vector<t_token> vtoken;
     std::smatch sm;
-    std::regex re_instr("(push|pop|dump|assert|add|sub|mul|div|mod|print|exit)");
+    std::regex re_instr("(push|pop|dump|assert|add|sub|mul|div|mod|print|exit|and|or|xor)");
     std::regex re_value("(?:(int(?:8|16|32))\\((.*)\\)|(double|float)\\((.*)\\))");
 
     // std::replace(line.begin(), line.end(), '\t', ' ');
@@ -123,12 +123,12 @@ bool Analyzer::lex(std::vector<std::string> &lines)
     return false;
 }
 
-bool Analyzer::parse( void )
+bool Analyzer::parse( std::vector<std::string> &lines )
 {
     std::vector<std::vector<t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
     for (; it != ite; ++it)
     {
-      this->parseLine(*it);
+      this->parseLine(*it, lines);
     }
     // print parse errors
     bool ret = true;
@@ -147,16 +147,16 @@ bool Analyzer::parse( void )
     if (this->_vexit.size() > 1)
     {
         std::vector<int>::iterator it_vexit = this->_vexit.begin(), ite_vexit = this->_vexit.end();
-        std::cerr << "\x1b[31mError: \x1b[32mParser: \x1b[35mthere is more than one  EXIT instruction in the program :" << std::endl;
+        std::cerr << "\x1b[31mError: \x1b[32mParser: \x1b[35mthere is more than one  EXIT instruction in the program :\x1b[0m" << std::endl;
         for (; it_vexit != ite_vexit; ++it_vexit)
-            std::cerr << "line " << *it_vexit  << std::endl;
+            std::cerr << "line " << (*it_vexit + 1)  << std::endl;
         std::cerr << "\x1b[0m";
         return false;
     }
     return ret;
 }
 
-bool Analyzer::parseLine(std::vector<t_token> & line)
+bool Analyzer::parseLine(std::vector<t_token> & line, std::vector<std::string> & original_lines)
 {
     t_error     err;
 
@@ -164,6 +164,7 @@ bool Analyzer::parseLine(std::vector<t_token> & line)
         return true;
     err.row = line.at(0).row;
     err.col = 0;
+    err.line = original_lines.at(err.row);
     if (line.at(0).value == "exit")
     {
         this->_vexit.push_back(err.row);

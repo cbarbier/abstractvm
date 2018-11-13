@@ -33,6 +33,9 @@ class Operand : public IOperand
     IOperand const *operator*(IOperand const &rhs) const;
     IOperand const *operator/(IOperand const &rhs) const;
     IOperand const *operator%(IOperand const &rhs) const;
+    IOperand const *operator&(IOperand const &rhs) const;
+    IOperand const *operator|(IOperand const &rhs) const;
+    IOperand const *operator^(IOperand const &rhs) const;
     std::string const &toString(void) const;              // String representation of the instance;
     T getValue( void ) const;
 

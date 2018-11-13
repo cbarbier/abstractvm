@@ -29,12 +29,13 @@ int         main( int argc, char **argv)
     }
     AbstractVM vm( argc == 2 ? argv[1] : 0);
     Analyzer      analyzer;
-
-    if (!analyzer.lex( vm.getLines() )) // LEXER TOKENIZING THE ENTIRE PROGRAM 
+    std::vector<std::string> & lines = vm.getLines();
+    if (!analyzer.lex( lines )) // LEXER TOKENIZING THE ENTIRE PROGRAM 
         return (1);
-    if (!analyzer.parse()) // PARSER CHECKING THE SYNTAX OF THE ENTIRE PROGRAM
+    if (!analyzer.parse( lines )) // PARSER CHECKING THE SYNTAX OF THE ENTIRE PROGRAM
         return (1);
     analyzer.put_tokens();
     vm.exec(analyzer.getTokens());
+   
     return (0);
 }
