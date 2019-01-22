@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:48:58 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/26 10:33:16 by cbarbier         ###   ########.fr       */
+/*   Updated: 2019/01/22 17:07:17 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ class AbstractVM
     AbstractVM &operator=(const AbstractVM &);
     ~AbstractVM();
 
+    bool isValidChars( std::string & line);
     std::vector<std::string> &getLines(void);
     void getInput(std::istream &);
     void exec(std::vector<std::vector<Analyzer::t_token> > tokens);

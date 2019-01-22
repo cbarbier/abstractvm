@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:51:53 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/26 10:33:18 by cbarbier         ###   ########.fr       */
+/*   Updated: 2019/01/22 17:28:32 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,20 +56,38 @@ AbstractVM::AbstractVM(char *pfile) : _pfile(pfile)
     this->getInput(file);
 }
 
+bool AbstractVM::isValidChars( std::string & line)
+{
+    bool ret = true;
+
+    for ( size_t i = 0; i < line.length(); i++)
+    {
+        if ((line[i] < 32 || line[i] >= 127) && line[i] != '\n' && line[i] != '\t')
+        {
+            return false;
+        }
+    }
+    return ret;
+}
+
 void AbstractVM::getInput(std::istream &is)
 {
+    int         i = 1;
     std::string line;
 
     while (!is.fail() && !is.eof())
     {
         std::getline(is, line, '\n');
-        // std::cout << "line: " << line << std::endl;
-        // line = Utils::trim(line);
+        if (!this->isValidChars(line))
+        {
+            std::cerr << "Error: Invalid char @ line " << i << std::endl;
+            std::exit(1);
+        }
         if (line == ";;" && !this->_pfile)
             break;
         line = Utils::rmComment(line);
-        // if (line.length())
         this->_lines.push_back(line);
+        i++;
     }
 }
 
