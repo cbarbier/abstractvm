@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/18 12:04:26 by cbarbier          #+#    #+#             */
-/*   Updated: 2018/10/29 09:20:54 by cbarbier         ###   ########.fr       */
+/*   Updated: 2019/02/22 15:32:15 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ Operand<T>::Operand( const std::string & str )
         throw AbstractVM::MyException(std::string("Not a Valid Number"));
     if (std::numeric_limits<T>::max() < ld)
         throw AbstractVM::Overflow();
-    if (std::numeric_limits<T>::min() > ld)
+    if (std::numeric_limits<T>::lowest() > ld)
         throw AbstractVM::Underflow(std::string("Underflow"));
     this->_value = static_cast<T>(ld);
 }

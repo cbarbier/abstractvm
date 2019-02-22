@@ -3,17 +3,20 @@
 ;---------------
 
 push int8(42)
-push int16(32000);comment0
+push int16(32000);comment2
 ;comment1
 
 
 pop
+;            comment
 dump
-exit
+exit             ;comment3
 ;
 ;
 ;
 ;
 ;
-;
-;
+;comment4
+
+
+;end

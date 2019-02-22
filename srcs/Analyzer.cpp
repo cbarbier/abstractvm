@@ -249,8 +249,8 @@ std::vector<std::vector<Analyzer::t_token> > &Analyzer::getTokens( void )
 void Analyzer::t_error::put( const char * name ) const
 {
     std::cerr << std::endl
-              << "> " << this->line.substr(0, this->col) << "\x1b[35m" << this->line.substr(this->col, this->eow - this->col) << "\x1b[0m" << this->line.substr(this->eow) << std::endl;
-    std::cerr << "\x1b[31mError: \x1b[32m" << name << "\x1b[0m: [" << this->row << ":" << this->col << "] \x1b[35m" << this->mess << "\x1b[0m" << std::endl;
+              << "> " << this->line.substr(0, this->col) << "\x1b[35m" << this->line.substr(this->col, this->eow - this->col) << "\x1b[0m" << this->line.substr(this->eow);
+    std::cerr << std::endl << "\x1b[31mError: \x1b[32m" << name << "\x1b[0m: [" << this->row << ":" << this->col << "] \x1b[35m" << this->mess << "\x1b[0m" << std::endl;
 }
 
 void Analyzer::t_token::put(void) const

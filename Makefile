@@ -6,7 +6,7 @@
 #    By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/17 14:10:08 by cbarbier          #+#    #+#              #
-#    Updated: 2018/10/19 10:17:22 by cbarbier         ###   ########.fr        #
+#    Updated: 2019/02/22 16:26:06 by cbarbier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,9 +80,12 @@ CPPFLAGS	= \
 FRAMEWORKS =  \
 
 CFLAGS		= \
-			-Wall -Werror -Wextra -O2 -pedantic -Wunreachable-code -pedantic-errors	\
-			-g3							\
-			-fsanitize=address					\
+			-Wall -Werror -Wextra \
+			-pedantic             \
+			-Wunreachable-code    \
+			-pedantic-errors	  \
+			-O2                   \
+			-fsanitize=address    \
 
 
 # ---------------------------------------------------------------------------- #
@@ -103,7 +106,7 @@ $(DIR_OBJS)	:
 
 all : $(NAME)
 
-$(DIR_OBJS)/%.o	:	$(DIR_SRCS)/%.cpp
+$(DIR_OBJS)/%.o	:	$(DIR_SRCS)/%.cpp $(H_HDRS)
 	$(CC) $(CFLAGS) -c $< $(CPPFLAGS) $(LDFLAGS) $(LDLIBS)  $(FRAMEWORKS) -o $@
 			
 $(NAME)		: $(DIR_OBJS) $(O_SRCS) $(LIBS) $(H_HDRS)
@@ -111,7 +114,7 @@ $(NAME)		: $(DIR_OBJS) $(O_SRCS) $(LIBS) $(H_HDRS)
 
 clean		:
 	$(RM) $(DIR_OBJS)
-	$(RM) $(DIR_DEPS)
+#   $(RM) $(DIR_DEPS)
 
 
 fclean		: clean
