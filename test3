@@ -4,7 +4,7 @@
 
 
 push int8(120.0)
-
+print
 exit
 ;---------------
 ;      end     |

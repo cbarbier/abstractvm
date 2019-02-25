@@ -1,0 +1,6 @@
+push int8(10)
+push int8(10)
+xor
+assert int8(0)
+print
+exit

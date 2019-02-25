@@ -6,7 +6,7 @@
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 15:51:53 by cbarbier          #+#    #+#             */
-/*   Updated: 2019/01/22 17:28:32 by cbarbier         ###   ########.fr       */
+/*   Updated: 2019/02/25 12:04:35 by cbarbier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,13 @@ void AbstractVM::instr_dump(const IOperand *ptr_ope, size_t row)
 void AbstractVM::instr_assert(const IOperand *ptr_ope, size_t row)
 {
     if (this->_deque.size() == 0)
-        throw AbstractVM::PopEmptyStack();
-    if (ptr_ope->getType() != this->_deque.back()->getType())
+        throw AbstractVM::AssertEmptyStack();
+    
+    std::string s1 = this->_deque.back()->toString();
+    std::string s2 = ptr_ope->toString();
+    if (ptr_ope->getType() != this->_deque.back()->getType() || s1.compare(s2) != 0)
     {
-        std::cerr << "Error: bas Assert on line" << row << std::endl;
+        std::cerr << "\x1b[31mError: \x1b[32mParser: \x1b[0mbad Assert on line " << row << std::endl;
         this->instr_exit(0, 0);
     }
 }
@@ -300,7 +303,6 @@ void AbstractVM::exec(std::vector<std::vector<Analyzer::t_token> > tokens)
     size_t i, itype, row;
     const IOperand *ptr_ope;
     static std::string types[5] = {"int8", "int16", "int32", "float", "double"};
-    // std::vector<std::vector<Analyzer::t_token> >::iterator it = this->_ltokens.begin(), ite = this->_ltokens.end();
     std::vector<std::vector<Analyzer::t_token> >::iterator it = tokens.begin(), ite = tokens.end();
     for (; it != ite; ++it)
     {
@@ -309,7 +311,6 @@ void AbstractVM::exec(std::vector<std::vector<Analyzer::t_token> > tokens)
             this->debug();
             if (!it->size())
                 continue;
-            // std::vector<t_token>::iterator itt = it->begin();
             row = it->at(0).row;
             i = 0;
             while (AbstractVM::_instructions[i].name != it->at(0).value)
@@ -320,7 +321,6 @@ void AbstractVM::exec(std::vector<std::vector<Analyzer::t_token> > tokens)
                 while (types[itype] != it->at(1).value)
                     itype++;
                 ptr_ope = utils.createOperand(static_cast<eOperandType>(itype), it->at(1).arg);
-                // std::cout << AbstractVM::_instructions[i].name << " " << types[itype] << " " << ptr_ope->toString() << std::endl;
                 (this->*AbstractVM::_instructions[i].f)(ptr_ope, row);
             }
             else
@@ -329,6 +329,7 @@ void AbstractVM::exec(std::vector<std::vector<Analyzer::t_token> > tokens)
         catch (const std::exception &e)
         {
             std::cout << "\x1b[35mException: \x1b[0mParser line " << (row + 1) << " : "  << e.what() << std::endl;
+            std::exit(1);
         }
     }
 }

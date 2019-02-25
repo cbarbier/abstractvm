@@ -1,0 +1,6 @@
+; test errors
+;push int8(3);;
+assert int8(2)
+exit; end of the program
+;
+;

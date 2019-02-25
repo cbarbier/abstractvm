@@ -6,7 +6,7 @@
 #    By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/17 14:10:08 by cbarbier          #+#    #+#              #
-#    Updated: 2019/02/22 16:26:06 by cbarbier         ###   ########.fr        #
+#    Updated: 2019/02/25 10:42:16 by cbarbier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,7 +81,6 @@ FRAMEWORKS =  \
 
 CFLAGS		= \
 			-Wall -Werror -Wextra \
-			-g3                   \
 			-pedantic             \
 			-Wunreachable-code    \
 			-pedantic-errors	  \
