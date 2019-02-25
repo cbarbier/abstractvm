@@ -1,0 +1,14 @@
+; test errors
+push int8(3);
+push float(3);
+add
+print
+dump
+push int8(32)
+dump
+sub
+sub
+sub
+exit; end of the program
+;
+;

@@ -23,10 +23,6 @@
 // REGEX INSTR
 //      (push|pop|dump|assert|add|sub|mul|div|mod|print|exit)
 //
-//
-//
-//
-//
 
 class Analyzer
 {
@@ -48,7 +44,7 @@ class Analyzer
         std::string mess;
         std::string line;
 
-        void put(const char * name) const;
+        void put(const char * name);
     } t_error;
 
 

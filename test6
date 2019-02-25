@@ -1,0 +1,41 @@
+; test print 0123456789
+push int8(10) ; \n
+push int8(57);9
+push int8(56);8
+push int8(55);7
+push int8(54);6
+push int8(53);5
+push int8(52);4
+push int8(51);3
+push int8(50);2
+push int8(49);1
+push int8(48);0
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+print
+pop
+push int8(126)
+push float(10.720) ; // 10.73 * 11 = 117.92
+mod; // 126 - 117.92 = 8.08
+dump
+exit; end of the program
+;
+;

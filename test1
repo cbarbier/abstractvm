@@ -13,17 +13,17 @@ or
 or
 or
 or
-dump
+dump; // 31
 
 push int8(2)
 and
-dump
+dump; // 2
 pop
 
 push int8(16)
 push int8(17)
 xor
-dump
+dump; // 1 
 exit
 ;
 ;

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Analyzer.cpp                                          :+:      :+:    :+:   */
+/*   Analyzer.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cbarbier <cbarbier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -30,9 +30,6 @@ void Analyzer::chopLine(std::string &line, size_t h)
     std::regex re_instr("(push|pop|dump|assert|add|sub|mul|div|mod|print|exit|and|or|xor)");
     std::regex re_value("(?:(int(?:8|16|32))\\((.*)\\)|(double|float)\\((.*)\\))");
 
-    // std::replace(line.begin(), line.end(), '\t', ' ');
-    // ss << line;
-    // std::cout << "h: " << h << std::endl;
     t_error error;
     error.line = line;
 
@@ -47,18 +44,15 @@ void Analyzer::chopLine(std::string &line, size_t h)
         token.row = h;
         error.col = pos;
         error.eow = end;
-        // std::cout << "[" << word << "]" << std::endl;
 
         if (std::regex_match(word, sm, re_instr))
         {
-            // std::cout << "instr perfect match" << sm.size() << std::endl;
             token.type = 'I'; //for instruction
             token.value = std::string(sm[0]);
             vtoken.push_back(token);
         }
         else if (std::regex_search(word, sm, re_instr))
         {
-            // std::cout << "instr search but not match" << sm.size() << std::endl;
             error.mess = std::string(std::string("did you mean \x1b[32m") + std::string(sm[0]) + std::string("\x1b[0m"));
             this->_errors.push_back(error);
         }
@@ -246,8 +240,10 @@ std::vector<std::vector<Analyzer::t_token> > &Analyzer::getTokens( void )
 }
 
 
-void Analyzer::t_error::put( const char * name ) const
+void Analyzer::t_error::put( const char * name )
 {
+    if (this->eow > this->line.length())
+        this->eow = 0;
     std::cerr << std::endl
               << "> " << this->line.substr(0, this->col) << "\x1b[35m" << this->line.substr(this->col, this->eow - this->col) << "\x1b[0m" << this->line.substr(this->eow);
     std::cerr << std::endl << "\x1b[31mError: \x1b[32m" << name << "\x1b[0m: [" << this->row << ":" << this->col << "] \x1b[35m" << this->mess << "\x1b[0m" << std::endl;

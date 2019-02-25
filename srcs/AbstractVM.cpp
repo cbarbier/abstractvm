@@ -170,7 +170,7 @@ void AbstractVM::instr_sub(const IOperand *ptr_ope, size_t row)
     this->_deque.pop_back();
     p1 = this->_deque.back();
     this->_deque.pop_back();
-    this->_deque.push_back((*p1) + (*p2));
+    this->_deque.push_back((*p1) - (*p2));
     delete p1;
     delete p2;
 }

@@ -1,0 +1,22 @@
+;---------------
+;  test file   |
+;---------------
+
+
+;;
+dump
+push int8(120)
+push int8(8)
+push int8(1)
+add
+print
+dump
+add
+exit
+;
+;
+
+
+;---------------
+;      end     |
+;---------------

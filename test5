@@ -1,0 +1,20 @@
+push int16(3456);// xomment
+push float(129.120203042035);
+push int8(42)
+print
+push int8(32)
+print
+push int8(42)
+print
+push int8(32)
+print
+push int8(42)
+print
+push int8(32)
+print
+push int8(42)
+print
+push int8(10)
+print
+dump
+exit;;
